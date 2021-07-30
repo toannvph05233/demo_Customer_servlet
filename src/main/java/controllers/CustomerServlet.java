@@ -1,5 +1,7 @@
 package controllers;
 
+import dao.ConnectMySql;
+import dao.SelectCustomer;
 import models.Customer;
 import services.CustomerService;
 
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet(urlPatterns = {"/customer"})
 public class CustomerServlet extends HttpServlet {

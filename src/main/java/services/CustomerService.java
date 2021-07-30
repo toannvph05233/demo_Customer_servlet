@@ -1,18 +1,20 @@
 package services;
 
+import dao.SelectCustomer;
 import models.Customer;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CustomerService {
     public ArrayList<Customer> list = new ArrayList<>();
 
-    public CustomerService() {
-        list.add(new Customer(1,"Toàn","toan@gmail.com","quang ninh"));
-        list.add(new Customer(2,"Nam","toan@gmail.com","quang ninh"));
-        list.add(new Customer(3,"Hoàng","toan@gmail.com","quang ninh"));
-        list.add(new Customer(4,"Tám","toan@gmail.com","quang ninh"));
-        list.add(new Customer(5,"Dũng","toan@gmail.com","quang ninh"));
+    public CustomerService(){
+        try {
+            list = (ArrayList<Customer>) SelectCustomer.seclect();
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     public void save(Customer customer){
