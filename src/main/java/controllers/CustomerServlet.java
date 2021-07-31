@@ -1,7 +1,5 @@
 package controllers;
 
-import dao.ConnectMySql;
-import dao.SelectCustomer;
 import models.Customer;
 import services.CustomerService;
 
@@ -24,32 +22,45 @@ public class CustomerServlet extends HttpServlet {
         String action = req.getParameter("action");
         RequestDispatcher requestDispatcher;
 
-        if (action == null){
+        if (action == null) {
             action = "";
         }
-        switch (action){
+        switch (action) {
             case "create":
                 resp.sendRedirect("views/createCustomer.jsp");
                 break;
             case "edit":
                 int indexEdit = Integer.parseInt(req.getParameter("index"));
-                req.setAttribute("customer",customerService.list.get(indexEdit));
+                req.setAttribute("customer", customerService.list.get(indexEdit));
                 requestDispatcher = req.getRequestDispatcher("views/editCustomer.jsp");
-                requestDispatcher.forward(req,resp);
+                requestDispatcher.forward(req, resp);
                 break;
 
             case "delete":
                 int index = Integer.parseInt(req.getParameter("index"));
-                customerService.delete(index);
-                resp.sendRedirect("/customer");
+                try {
+                    customerService.delete(index);
+                    resp.sendRedirect("/customer");
+                } catch (Exception e) {
+                    resp.sendRedirect("views/404.jsp");
+                }
                 break;
 
-            case "find":
+            case "findName":
+                String name = req.getParameter("findName");
+                try {
+                    req.setAttribute("listCustomer", customerService.findByName(name));
+                    requestDispatcher = req.getRequestDispatcher("views/ShowCustomer.jsp");
+                    requestDispatcher.forward(req, resp);
+                } catch (Exception e) {
+                    resp.sendRedirect("views/404.jsp");
+                }
+                break;
 
             default:
-                req.setAttribute("listCustomer",customerService.list);
+                req.setAttribute("listCustomer", customerService.list);
                 requestDispatcher = req.getRequestDispatcher("views/ShowCustomer.jsp");
-                requestDispatcher.forward(req,resp);
+                requestDispatcher.forward(req, resp);
         }
 
     }
@@ -59,38 +70,44 @@ public class CustomerServlet extends HttpServlet {
         String action = req.getParameter("action");
         RequestDispatcher requestDispatcher;
 
-        switch (action){
+        switch (action) {
             case "create":
-                int id = Integer.parseInt(req.getParameter("id"));
-                String name = req.getParameter("name");
-                String email = req.getParameter("email");
-                String address = req.getParameter("address");
+                try {
+                    int id = Integer.parseInt(req.getParameter("id"));
+                    String name = req.getParameter("name");
+                    String email = req.getParameter("email");
+                    String address = req.getParameter("address");
 
-                Customer customer = new Customer(id,name,email,address);
-                customerService.save(customer);
+                    Customer customer = new Customer(id, name, email, address);
+                    customerService.save(customer);
+                    req.setAttribute("listCustomer", customerService.list);
+                    requestDispatcher = req.getRequestDispatcher("views/ShowCustomer.jsp");
+                    requestDispatcher.forward(req, resp);
 
-                // chuyển hướng request và response sang thàng jsp
-                req.setAttribute("listCustomer",customerService.list);
-                requestDispatcher = req.getRequestDispatcher("views/ShowCustomer.jsp");
-                requestDispatcher.forward(req,resp);
+                } catch (Exception e) {
+                    resp.sendRedirect("views/404.jsp");
+                }
+
                 break;
 
             case "edit":
-                int idedit = Integer.parseInt(req.getParameter("id"));
-                String nameedit = req.getParameter("name");
-                String emailedit = req.getParameter("email");
-                String addressedit = req.getParameter("address");
+                try {
+                    int idedit = Integer.parseInt(req.getParameter("id"));
+                    String nameedit = req.getParameter("name");
+                    String emailedit = req.getParameter("email");
+                    String addressedit = req.getParameter("address");
 
-                Customer customerEdit = new Customer(idedit,nameedit,emailedit,addressedit);
+                    Customer customerEdit = new Customer(idedit, nameedit, emailedit, addressedit);
 
-                int index = Integer.parseInt(req.getParameter("index"));
-                customerService.edit(customerEdit,index);
-
-                // chuyển hướng request và response sang thàng jsp
-                req.setAttribute("listCustomer",customerService.list);
-                requestDispatcher = req.getRequestDispatcher("views/ShowCustomer.jsp");
-                requestDispatcher.forward(req,resp);
-
+                    int index = Integer.parseInt(req.getParameter("index"));
+                    customerService.edit(customerEdit, index);
+                    // chuyển hướng request và response sang thàng jsp
+                    req.setAttribute("listCustomer", customerService.list);
+                    requestDispatcher = req.getRequestDispatcher("views/ShowCustomer.jsp");
+                    requestDispatcher.forward(req, resp);
+                } catch (Exception e) {
+                    resp.sendRedirect("views/404.jsp");
+                }
                 break;
         }
     }

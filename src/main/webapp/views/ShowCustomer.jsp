@@ -25,7 +25,15 @@
 
     <h2>Show Customer</h2>
     <a href="/customer?action=create" class="btn btn-success">Create</a>
-<br>
+    <br>
+    <br>
+    <form action="/customer" method="get">
+    <input type="text" class="form-control" placeholder="tìm kiếm" name="findName">
+    <input type="text" hidden name="action" value="findName">
+    <button type="submit" class="btn btn-success">Find</button>
+    </form>
+
+    <br>
 <br>
     <table class="table">
         <thead>

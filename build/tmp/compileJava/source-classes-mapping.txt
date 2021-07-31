@@ -2,9 +2,9 @@ models/Customer.java
  models.Customer
 dao/ConnectMySql.java
  dao.ConnectMySql
+dao/ManageCustomer.java
+ dao.ManageCustomer
 services/CustomerService.java
  services.CustomerService
 controllers/CustomerServlet.java
  controllers.CustomerServlet
-dao/SelectCustomer.java
- dao.SelectCustomer
